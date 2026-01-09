@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
-import { Trash2, ChevronRight, Calendar, Clock, Split, FileText } from 'lucide-react'
+import { Trash2, ChevronRight, Calendar, Clock, Split, FileText, Share2, Download } from 'lucide-react'
 import { format } from 'date-fns'
 import {
   Dialog,
@@ -50,6 +50,50 @@ export default function HistoryPage() {
     }
   }
 
+  const handleExport = (item: any) => {
+    const content = `# PromptPerfect Evaluation Report
+
+## Original Prompt
+${item.promptText}
+
+## Scores
+- Clarity: ${item.clarityScore}%
+- Relevance: ${item.relevanceScore}%
+- Coherence: ${item.coherenceScore}%
+${Object.entries(item.customScores || {}).map(([k, v]) => `- ${k}: ${v}%`).join('\n')}
+
+## Improved Version
+${item.rewrittenPrompt}
+`;
+    const blob = new Blob([content], { type: 'text/markdown' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'prompt-analysis.md'
+    a.click()
+    URL.revokeObjectURL(url)
+    toast.success('Report exported as Markdown')
+  }
+
+  const handleShare = async (id: string) => {
+    try {
+      const res = await fetch(`/api/history/${id}/share`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isPublic: true }),
+      })
+      if (res.ok) {
+        const shareUrl = `${window.location.origin}/share/${id}`
+        await navigator.clipboard.writeText(shareUrl)
+        toast.success('Share link copied to clipboard!')
+        // Update local state to show it's public
+        setHistory(history.map(item => item.id === id ? { ...item, isPublic: true } : item))
+      }
+    } catch (error) {
+      toast.error('Failed to generate share link')
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#FBFBFD] text-[#1D1D1F]">
       <Navbar />
@@ -90,9 +134,9 @@ export default function HistoryPage() {
                         <Clock className="h-3.5 w-3.5" />
                         {format(new Date(item.createdAt), 'p')}
                       </div>
-                      {item.mode === 'ab' && (
-                        <Badge variant="outline" className="rounded-full bg-blue-50 text-blue-600 border-blue-100 px-2 py-0 text-[10px]">
-                          A/B Test
+                      {item.isPublic && (
+                        <Badge variant="outline" className="rounded-full bg-emerald-50 text-emerald-600 border-emerald-100 px-2 py-0 text-[10px]">
+                          Public
                         </Badge>
                       )}
                     </div>
@@ -113,6 +157,12 @@ export default function HistoryPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon" onClick={() => handleExport(item)} className="h-9 w-9 rounded-full hover:bg-slate-100">
+                      <Download className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleShare(item.id)} className="h-9 w-9 rounded-full hover:bg-slate-100 text-primary">
+                      <Share2 className="h-4 w-4" />
+                    </Button>
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button variant="ghost" size="sm" className="rounded-full px-4 hover:bg-slate-100">

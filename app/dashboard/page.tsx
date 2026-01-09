@@ -8,9 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
-import { CheckCircle2, Sparkles, Save, Plus, X, Split, FileText } from 'lucide-react'
+import { CheckCircle2, Sparkles, Save, Plus, X, Split, FileText, Share2, Download, Copy } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 export default function DashboardPage() {
   const [mode, setMode] = useState<'single' | 'ab'>('single')
@@ -22,6 +28,8 @@ export default function DashboardPage() {
   const [loadingB, setLoadingB] = useState(false)
   const [analysisA, setAnalysisA] = useState<any>(null)
   const [analysisB, setAnalysisB] = useState<any>(null)
+  const [savedIdA, setSavedIdA] = useState<string | null>(null)
+  const [savedIdB, setSavedIdB] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
 
   const handleAddCriterion = () => {
@@ -39,8 +47,13 @@ export default function DashboardPage() {
     const prompt = target === 'A' ? promptA : promptB
     if (!prompt.trim()) return
     
-    if (target === 'A') setLoadingA(true)
-    else setLoadingB(true)
+    if (target === 'A') {
+      setLoadingA(true)
+      setSavedIdA(null)
+    } else {
+      setLoadingB(true)
+      setSavedIdB(null)
+    }
 
     try {
       const res = await fetch('/api/analyze', {
@@ -84,8 +97,11 @@ export default function DashboardPage() {
           mode: mode,
         }),
       })
+      const data = await res.json()
       if (res.ok) {
         toast.success('Analysis saved to history')
+        if (target === 'A') setSavedIdA(data.id)
+        else setSavedIdB(data.id)
       } else {
         toast.error('Failed to save analysis')
       }
@@ -96,17 +112,75 @@ export default function DashboardPage() {
     }
   }
 
-  const AnalysisCard = ({ analysis, target, loading }: { analysis: any, target: 'A' | 'B', loading: boolean }) => (
-    <Card className="border-none shadow-sm bg-white/50 backdrop-blur-sm">
+  const handleExport = (analysis: any, prompt: string) => {
+    const content = `# PromptPerfect Evaluation Report
+
+## Original Prompt
+${prompt}
+
+## Scores
+- Clarity: ${analysis.clarityScore}%
+- Relevance: ${analysis.relevanceScore}%
+- Coherence: ${analysis.coherenceScore}%
+${Object.entries(analysis.customScores || {}).map(([k, v]) => `- ${k}: ${v}%`).join('\n')}
+
+## Suggestions
+${analysis.suggestions.map((s: string) => `- ${s}`).join('\n')}
+
+## Improved Version
+${analysis.rewrittenPrompt}
+`;
+    const blob = new Blob([content], { type: 'text/markdown' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'prompt-analysis.md'
+    a.click()
+    URL.revokeObjectURL(url)
+    toast.success('Report exported as Markdown')
+  }
+
+  const handleShare = async (id: string) => {
+    try {
+      const res = await fetch(`/api/history/${id}/share`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isPublic: true }),
+      })
+      if (res.ok) {
+        const shareUrl = `${window.location.origin}/share/${id}`
+        await navigator.clipboard.writeText(shareUrl)
+        toast.success('Share link copied to clipboard!')
+      }
+    } catch (error) {
+      toast.error('Failed to generate share link')
+    }
+  }
+
+  const AnalysisCard = ({ analysis, target, loading, savedId, prompt }: { analysis: any, target: 'A' | 'B', loading: boolean, savedId: string | null, prompt: string }) => (
+    <Card className="border-none shadow-sm bg-white/50 backdrop-blur-sm rounded-3xl overflow-hidden">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold">Analysis {mode === 'ab' ? target : ''}</CardTitle>
-          {analysis && (
-            <Button variant="ghost" size="sm" onClick={() => handleSave(target)} disabled={saving} className="h-8 px-2 text-xs">
-              <Save className="mr-1.5 h-3.5 w-3.5" />
-              Save
-            </Button>
-          )}
+          <div className="flex items-center gap-1">
+            {analysis && (
+              <>
+                <Button variant="ghost" size="icon" onClick={() => handleExport(analysis, prompt)} className="h-8 w-8 rounded-full">
+                  <Download className="h-4 w-4" />
+                </Button>
+                {savedId ? (
+                  <Button variant="ghost" size="icon" onClick={() => handleShare(savedId)} className="h-8 w-8 rounded-full text-primary">
+                    <Share2 className="h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button variant="ghost" size="sm" onClick={() => handleSave(target)} disabled={saving} className="h-8 px-3 text-xs rounded-full">
+                    <Save className="mr-1.5 h-3.5 w-3.5" />
+                    Save
+                  </Button>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -265,13 +339,13 @@ export default function DashboardPage() {
 
             {mode === 'ab' && (
               <div className="grid md:grid-cols-2 gap-6">
-                <AnalysisCard analysis={analysisA} target="A" loading={loadingA} />
-                <AnalysisCard analysis={analysisB} target="B" loading={loadingB} />
+                <AnalysisCard analysis={analysisA} target="A" loading={loadingA} savedId={savedIdA} prompt={promptA} />
+                <AnalysisCard analysis={analysisB} target="B" loading={loadingB} savedId={savedIdB} prompt={promptB} />
               </div>
             )}
 
             {mode === 'single' && (
-              <AnalysisCard analysis={analysisA} target="A" loading={loadingA} />
+              <AnalysisCard analysis={analysisA} target="A" loading={loadingA} savedId={savedIdA} prompt={promptA} />
             )}
           </div>
 
