@@ -8,13 +8,17 @@ datasource db {
 }
 
 model User {
-  id           String           @id @default(cuid())
-  username     String?
-  email        String           @unique
-  passwordHash String
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  analyses     PromptAnalysis[]
+  id                     String           @id @default(cuid())
+  username               String?
+  email                  String           @unique
+  passwordHash           String
+  stripeCustomerId       String?          @unique
+  stripeSubscriptionId   String?          @unique
+  stripePriceId          String?
+  stripeCurrentPeriodEnd DateTime?
+  analyses               PromptAnalysis[]
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
 }
 
 model PromptAnalysis {
@@ -23,13 +27,13 @@ model PromptAnalysis {
   clarityScore    Int
   relevanceScore  Int
   coherenceScore  Int
+  customScores    Json?
   suggestions     Json
   rewrittenPrompt String
+  mode            String   @default("single")
+  comparisonId    String?
+  isPublic        Boolean  @default(false)
   createdAt       DateTime @default(now())
   userId          String
-  comparisonId    String?
-  customScores    Json?
-  mode            String   @default("single")
-  isPublic        Boolean  @default(false)
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

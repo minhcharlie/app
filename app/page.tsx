@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { ArrowRight, CheckCircle2, Sparkles, Zap, Split, BarChart3, Shield, MessageSquare, ZapIcon, Layers, Globe, ChevronDown } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Sparkles, Zap, Split, BarChart3, Shield, MessageSquare, Globe, Layers, ChevronDown } from 'lucide-react'
+import { PricingButton } from '@/components/PricingButton'
 
 export default function LandingPage() {
   return (
@@ -203,12 +204,14 @@ export default function LandingPage() {
                 {
                   name: "Basic",
                   price: "0",
+                  priceId: "price_basic_placeholder",
                   desc: "Perfect for individuals and students.",
                   features: ["Unlimited single analyses", "Basic history tracking", "Standard AI model", "Markdown export"]
                 },
                 {
                   name: "Pro",
                   price: "0",
+                  priceId: "price_pro_placeholder",
                   desc: "For power users and professional teams.",
                   features: ["A/B testing mode", "Custom evaluation criteria", "Advanced Gemini 1.5 Pro", "Collaboration links", "Priority support"]
                 }
@@ -230,9 +233,12 @@ export default function LandingPage() {
                       </li>
                     ))}
                   </ul>
-                  <Button className={`w-full h-14 rounded-full text-lg font-semibold ${i === 1 ? 'bg-[#0071E3] hover:bg-[#0077ED]' : 'bg-[#1D1D1F] hover:bg-black'}`}>
+                  <PricingButton 
+                    priceId={plan.priceId}
+                    className={`w-full h-14 rounded-full text-lg font-semibold ${i === 1 ? 'bg-[#0071E3] hover:bg-[#0077ED]' : 'bg-[#1D1D1F] hover:bg-black'}`}
+                  >
                     Get Started
-                  </Button>
+                  </PricingButton>
                 </div>
               ))}
             </div>
@@ -241,7 +247,7 @@ export default function LandingPage() {
 
         {/* FAQ */}
         <section id="faq" className="py-32 md:py-48">
-          <div className="container max-w-3xl px-6">
+          <div className="container max-w-[800px] px-6">
             <h2 className="text-4xl font-bold tracking-tight text-center mb-24">Frequently Asked Questions</h2>
             <div className="space-y-8">
               {[
