@@ -23,9 +23,12 @@ model PromptAnalysis {
   clarityScore    Int
   relevanceScore  Int
   coherenceScore  Int
+  customScores    Json?    // Store custom criteria scores
   suggestions     Json
   rewrittenPrompt String
-  createdAt       DateTime @default(now())
+  mode            String   @default("single") // "single" or "ab"
+  comparisonId    String?  // To link A/B test pairs
+  createdAt     DateTime @default(now())
   userId          String
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

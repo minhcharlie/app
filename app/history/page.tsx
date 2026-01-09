@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
-import { Trash2, ChevronRight, Calendar } from 'lucide-react'
+import { Trash2, ChevronRight, Calendar, Clock, Split, FileText } from 'lucide-react'
 import { format } from 'date-fns'
 import {
   Dialog,
@@ -51,78 +51,129 @@ export default function HistoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FBFBFD] text-[#1D1D1F]">
       <Navbar />
-      <main className="container py-10">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Analysis History</h1>
-          <p className="text-muted-foreground">View and manage your previous prompt evaluations.</p>
+      <main className="container max-w-5xl py-12 px-6">
+        <div className="mb-12 space-y-2">
+          <h1 className="text-4xl font-semibold tracking-tight">History</h1>
+          <p className="text-lg text-slate-500 font-medium">Review and manage your past evaluations.</p>
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-20">
+          <div className="flex flex-col items-center justify-center py-32 space-y-4">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <p className="text-sm text-muted-foreground">Loading your history...</p>
           </div>
         ) : history.length === 0 ? (
-          <Card className="p-12 text-center">
-            <p className="text-muted-foreground">No history found. Start by analyzing a prompt!</p>
+          <Card className="p-20 text-center border-none shadow-sm bg-white/50 backdrop-blur-sm rounded-3xl">
+            <div className="mx-auto h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+              <FileText className="h-6 w-6 text-slate-400" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">No history yet</h3>
+            <p className="text-slate-500 mb-6">Start by analyzing your first prompt in the lab.</p>
+            <Button asChild className="rounded-full px-8">
+              <a href="/dashboard">Go to Lab</a>
+            </Button>
           </Card>
         ) : (
           <div className="grid gap-4">
             {history.map((item) => (
-              <Card key={item.id} className="overflow-hidden transition-shadow hover:shadow-md">
+              <Card key={item.id} className="group border-none shadow-sm bg-white/50 backdrop-blur-sm rounded-2xl overflow-hidden transition-all hover:shadow-md hover:bg-white">
                 <div className="flex items-center justify-between p-6">
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Calendar className="h-4 w-4" />
-                      {format(new Date(item.createdAt), 'PPP p')}
+                  <div className="flex-1 space-y-3">
+                    <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-slate-400">
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5" />
+                        {format(new Date(item.createdAt), 'MMM d, yyyy')}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="h-3.5 w-3.5" />
+                        {format(new Date(item.createdAt), 'p')}
+                      </div>
+                      {item.mode === 'ab' && (
+                        <Badge variant="outline" className="rounded-full bg-blue-50 text-blue-600 border-blue-100 px-2 py-0 text-[10px]">
+                          A/B Test
+                        </Badge>
+                      )}
                     </div>
-                    <h3 className="font-semibold line-clamp-1">{item.promptText}</h3>
-                    <div className="flex gap-2">
-                      <Badge variant="secondary">Clarity: {item.clarityScore}%</Badge>
-                      <Badge variant="secondary">Relevance: {item.relevanceScore}%</Badge>
-                      <Badge variant="secondary">Coherence: {item.coherenceScore}%</Badge>
+                    <h3 className="text-lg font-semibold line-clamp-1 pr-8">{item.promptText}</h3>
+                    <div className="flex flex-wrap gap-3">
+                      <div className="flex items-center gap-1.5">
+                        <div className="h-2 w-2 rounded-full bg-blue-500" />
+                        <span className="text-xs font-medium text-slate-600">Clarity: {item.clarityScore}%</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <div className="h-2 w-2 rounded-full bg-emerald-500" />
+                        <span className="text-xs font-medium text-slate-600">Relevance: {item.relevanceScore}%</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <div className="h-2 w-2 rounded-full bg-violet-500" />
+                        <span className="text-xs font-medium text-slate-600">Coherence: {item.coherenceScore}%</span>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button variant="outline" size="sm">
-                          View Details
-                          <ChevronRight className="ml-2 h-4 w-4" />
+                        <Button variant="ghost" size="sm" className="rounded-full px-4 hover:bg-slate-100">
+                          Details
+                          <ChevronRight className="ml-1.5 h-4 w-4" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto rounded-[2rem] border-none shadow-2xl">
                         <DialogHeader>
-                          <DialogTitle>Analysis Details</DialogTitle>
+                          <DialogTitle className="text-2xl font-bold">Evaluation Details</DialogTitle>
                         </DialogHeader>
-                        <div className="space-y-6 py-4">
-                          <div className="space-y-2">
-                            <h4 className="text-sm font-semibold">Original Prompt</h4>
-                            <div className="rounded-md bg-slate-50 p-3 text-sm border">{item.promptText}</div>
+                        <div className="space-y-8 py-6">
+                          <div className="space-y-3">
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">Original Prompt</h4>
+                            <div className="rounded-2xl bg-slate-50 p-6 text-sm text-slate-700 border border-slate-100 leading-relaxed">
+                              {item.promptText}
+                            </div>
                           </div>
+                          
                           <div className="grid grid-cols-3 gap-4">
-                            <div className="text-center p-3 rounded-md bg-blue-50 border border-blue-100">
-                              <div className="text-xs text-blue-600 font-medium uppercase">Clarity</div>
-                              <div className="text-2xl font-bold text-blue-700">{item.clarityScore}%</div>
-                            </div>
-                            <div className="text-center p-3 rounded-md bg-green-50 border border-green-100">
-                              <div className="text-xs text-green-600 font-medium uppercase">Relevance</div>
-                              <div className="text-2xl font-bold text-green-700">{item.relevanceScore}%</div>
-                            </div>
-                            <div className="text-center p-3 rounded-md bg-purple-50 border border-purple-100">
-                              <div className="text-xs text-purple-600 font-medium uppercase">Coherence</div>
-                              <div className="text-2xl font-bold text-purple-700">{item.coherenceScore}%</div>
-                            </div>
+                            {[
+                              { label: 'Clarity', score: item.clarityScore, color: 'text-blue-600', bg: 'bg-blue-50' },
+                              { label: 'Relevance', score: item.relevanceScore, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                              { label: 'Coherence', score: item.coherenceScore, color: 'text-violet-600', bg: 'bg-violet-50' }
+                            ].map((stat) => (
+                              <div key={stat.label} className={`text-center p-4 rounded-2xl ${stat.bg} border border-white shadow-sm`}>
+                                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">{stat.label}</div>
+                                <div className={`text-3xl font-bold ${stat.color}`}>{stat.score}%</div>
+                              </div>
+                            ))}
                           </div>
-                          <div className="space-y-2">
-                            <h4 className="text-sm font-semibold">Rewritten Prompt</h4>
-                            <div className="rounded-md bg-slate-100 p-3 text-sm italic border">{item.rewrittenPrompt}</div>
+
+                          {item.customScores && Object.keys(item.customScores).length > 0 && (
+                            <div className="space-y-3">
+                              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">Custom Criteria</h4>
+                              <div className="grid gap-3">
+                                {Object.entries(item.customScores).map(([key, value]: [string, any]) => (
+                                  <div key={key} className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100">
+                                    <span className="text-sm font-medium text-slate-700">{key}</span>
+                                    <span className="text-sm font-bold text-slate-900">{value}%</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="space-y-3">
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">Improved Version</h4>
+                            <div className="rounded-2xl bg-slate-900 p-6 text-sm text-slate-300 italic leading-relaxed shadow-xl">
+                              {item.rewrittenPrompt}
+                            </div>
                           </div>
                         </div>
                       </DialogContent>
                     </Dialog>
-                    <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => handleDelete(item.id)}>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-9 w-9 rounded-full text-slate-300 hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all" 
+                      onClick={() => handleDelete(item.id)}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

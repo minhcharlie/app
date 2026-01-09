@@ -48,3 +48,5 @@ prisma:query SELECT "public"."User"."id", "public"."User"."username", "public"."
  GET /dashboard 200 in 804ms
  ✓ Compiled /api/analyze in 304ms
  POST /api/analyze 200 in 613ms
+   Reload env: .env
+[?25h
