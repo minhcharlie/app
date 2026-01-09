@@ -1,0 +1,50 @@
+$ next dev --turbopack
+   ▲ Next.js 15.5.6 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://169.254.0.21:3000
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ✓ Ready in 2.3s
+   Reload env: .env
+   Reload env: .env
+   Reload env: .env
+ ○ Compiling / ...
+ ✓ Compiled / in 6s
+ GET / 200 in 6978ms
+ ⚠ Cross origin request detected from busy-corners-allow.lindy.site to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 242ms
+ GET / 200 in 341ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 608ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 975ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 897ms
+ GET /login 200 in 994ms
+ GET /login 200 in 270ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 292ms
+ ○ Compiling /signup ...
+ ✓ Compiled /signup in 610ms
+ GET /signup 200 in 734ms
+ GET /signup 200 in 135ms
+ GET / 200 in 208ms
+ GET /favicon.ico?favicon.bf3c9292.ico 200 in 281ms
+ GET /signup 200 in 126ms
+ ✓ Compiled /api/auth/signup in 259ms
+prisma:query SELECT "public"."User"."id", "public"."User"."username", "public"."User"."email", "public"."User"."passwordHash", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "public"."User" ("id","username","email","passwordHash","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6) RETURNING "public"."User"."id", "public"."User"."username", "public"."User"."email", "public"."User"."passwordHash", "public"."User"."createdAt", "public"."User"."updatedAt"
+ POST /api/auth/signup 200 in 859ms
+ GET /login 200 in 127ms
+ ✓ Compiled /api/auth/login in 341ms
+prisma:query SELECT "public"."User"."id", "public"."User"."username", "public"."User"."email", "public"."User"."passwordHash", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+ POST /api/auth/login 200 in 821ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 682ms
+ GET /dashboard 200 in 804ms
+ ✓ Compiled /api/analyze in 304ms
+ POST /api/analyze 200 in 613ms
