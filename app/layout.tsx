@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PromptPerfect - AI Prompt Evaluation",
+  title: "PromptScore - AI Prompt Evaluation",
   description: "Evaluate and improve your LLM prompts with AI-driven analysis.",
 };
 

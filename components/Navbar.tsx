@@ -28,7 +28,7 @@ export function Navbar() {
           <div className="bg-primary rounded-lg p-1.5">
             <Image src="/images/logo.png" alt="Logo" width={20} height={20} className="invert" />
           </div>
-          <span className="text-lg font-bold tracking-tight">PromptPerfect</span>
+          <span className="text-lg font-bold tracking-tight">PromptScore</span>
         </Link>
         
         <div className="hidden md:flex items-center gap-1">

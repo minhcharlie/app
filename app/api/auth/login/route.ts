@@ -25,11 +25,16 @@ export async function POST(request: Request) {
       .setExpirationTime('24h')
       .sign(JWT_SECRET)
 
-    const response = NextResponse.json({ message: 'Login successful', user: { id: user.id, email: user.email, username: user.username } })
+    const response = NextResponse.json({ 
+      message: 'Login successful', 
+      token, // Return token for localStorage fallback
+      user: { id: user.id, email: user.email, username: user.username } 
+    })
+    
     response.cookies.set('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 60 * 60 * 24, // 1 day
       path: '/',
     })

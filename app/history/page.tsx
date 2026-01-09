@@ -51,7 +51,7 @@ export default function HistoryPage() {
   }
 
   const handleExport = (item: any) => {
-    const content = `# PromptPerfect Evaluation Report
+    const content = `# PromptScore Evaluation Report
 
 ## Original Prompt
 ${item.promptText}
@@ -77,7 +77,7 @@ ${item.rewrittenPrompt}
 
   const handleShare = async (id: string) => {
     try {
-      const res = await fetch(`/api/history/${id}/share`, {
+      const res = await fetch(`/api/history/${id}/share`, { headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` },
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isPublic: true }),

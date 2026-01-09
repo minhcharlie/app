@@ -113,7 +113,7 @@ export default function DashboardPage() {
   }
 
   const handleExport = (analysis: any, prompt: string) => {
-    const content = `# PromptPerfect Evaluation Report
+    const content = `# PromptScore Evaluation Report
 
 ## Original Prompt
 ${prompt}
@@ -142,7 +142,7 @@ ${analysis.rewrittenPrompt}
 
   const handleShare = async (id: string) => {
     try {
-      const res = await fetch(`/api/history/${id}/share`, {
+      const res = await fetch(`/api/history/${id}/share`, { headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` },
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isPublic: true }),

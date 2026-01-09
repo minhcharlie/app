@@ -2,51 +2,108 @@ $ next dev --turbopack
    ▲ Next.js 15.5.6 (Turbopack)
    - Local:        http://localhost:3000
    - Network:      http://169.254.0.21:3000
+   - Environments: .env
 
  ✓ Starting...
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-
- ✓ Ready in 2.3s
-   Reload env: .env
-   Reload env: .env
-   Reload env: .env
+ ✓ Ready in 1805ms
  ○ Compiling / ...
- ✓ Compiled / in 6s
- GET / 200 in 6978ms
+ ✓ Compiled / in 6.7s
+ ⨯ ReferenceError: Split is not defined
+    at LandingPage (app/page.tsx:67:26)
+  65 |                 },
+  66 |                 {
+> 67 |                   icon: <Split className="h-6 w-6 text-blue-500" />,
+     |                          ^
+  68 |                   title: "A/B Testing",
+  69 |                   description: "Compare two prompts side-by-side to see which one performs better for your specific use case."
+  70 |                 }, {
+  digest: '2035659516'
+}
+ GET / 500 in 7483ms
+ ⨯ ReferenceError: Split is not defined
+    at LandingPage (app/page.tsx:67:26)
+  65 |                 },
+  66 |                 {
+> 67 |                   icon: <Split className="h-6 w-6 text-blue-500" />,
+     |                          ^
+  68 |                   title: "A/B Testing",
+  69 |                   description: "Compare two prompts side-by-side to see which one performs better for your specific use case."
+  70 |                 }, {
+  digest: '2035659516'
+}
+ GET / 500 in 228ms
  ⚠ Cross origin request detected from busy-corners-allow.lindy.site to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
 Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
- GET / 200 in 242ms
- GET / 200 in 341ms
  ○ Compiling /favicon.ico ...
- ✓ Compiled /favicon.ico in 608ms
- GET /favicon.ico?favicon.bf3c9292.ico 200 in 975ms
+ ✓ Compiled /favicon.ico in 550ms
+ GET /favicon.ico 200 in 921ms
  ○ Compiling /login ...
- ✓ Compiled /login in 897ms
- GET /login 200 in 994ms
- GET /login 200 in 270ms
- GET /favicon.ico?favicon.bf3c9292.ico 200 in 292ms
- ○ Compiling /signup ...
- ✓ Compiled /signup in 610ms
- GET /signup 200 in 734ms
- GET /signup 200 in 135ms
- GET / 200 in 208ms
- GET /favicon.ico?favicon.bf3c9292.ico 200 in 281ms
- GET /signup 200 in 126ms
- ✓ Compiled /api/auth/signup in 259ms
-prisma:query SELECT "public"."User"."id", "public"."User"."username", "public"."User"."email", "public"."User"."passwordHash", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
-prisma:query INSERT INTO "public"."User" ("id","username","email","passwordHash","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6) RETURNING "public"."User"."id", "public"."User"."username", "public"."User"."email", "public"."User"."passwordHash", "public"."User"."createdAt", "public"."User"."updatedAt"
- POST /api/auth/signup 200 in 859ms
- GET /login 200 in 127ms
- ✓ Compiled /api/auth/login in 341ms
-prisma:query SELECT "public"."User"."id", "public"."User"."username", "public"."User"."email", "public"."User"."passwordHash", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
- POST /api/auth/login 200 in 821ms
+ ✓ Compiled /login in 969ms
+ GET /login 200 in 1267ms
+ ⨯ ReferenceError: Split is not defined
+    at LandingPage (app/page.tsx:67:26)
+  65 |                 },
+  66 |                 {
+> 67 |                   icon: <Split className="h-6 w-6 text-blue-500" />,
+     |                          ^
+  68 |                   title: "A/B Testing",
+  69 |                   description: "Compare two prompts side-by-side to see which one performs better for your specific use case."
+  70 |                 }, {
+  digest: '2035659516'
+}
+ GET / 500 in 228ms
+ ○ Compiling /history ...
+ ✓ Compiled /history in 1805ms
+ GET /history 200 in 2097ms
+ ✓ Compiled /api/history in 371ms
+ GET /api/history 401 in 735ms
+ ○ Compiling /share/[id] ...
+ ✓ Compiled /share/[id] in 779ms
+ GET /share/cm5p666660003126866666666 200 in 1760ms
+ ✓ Compiled /api/public/analysis/[id] in 276ms
+prisma:query SELECT "public"."PromptAnalysis"."id", "public"."PromptAnalysis"."promptText", "public"."PromptAnalysis"."clarityScore", "public"."PromptAnalysis"."relevanceScore", "public"."PromptAnalysis"."coherenceScore", "public"."PromptAnalysis"."customScores", "public"."PromptAnalysis"."suggestions", "public"."PromptAnalysis"."rewrittenPrompt", "public"."PromptAnalysis"."mode", "public"."PromptAnalysis"."comparisonId", "public"."PromptAnalysis"."isPublic", "public"."PromptAnalysis"."createdAt", "public"."PromptAnalysis"."userId" FROM "public"."PromptAnalysis" WHERE ("public"."PromptAnalysis"."id" = $1 AND "public"."PromptAnalysis"."isPublic" = $2) LIMIT $3 OFFSET $4
+ GET /api/public/analysis/cm5p666660003126866666666 404 in 1580ms
  ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 682ms
- GET /dashboard 200 in 804ms
- ✓ Compiled /api/analyze in 304ms
- POST /api/analyze 200 in 613ms
-   Reload env: .env
+ ✓ Compiled /dashboard in 831ms
+ GET /dashboard 200 in 1059ms
+ GET /login 200 in 191ms
+ ✓ Compiled /api/auth/login in 280ms
+prisma:query SELECT 1
+prisma:query SELECT "public"."User"."id", "public"."User"."username", "public"."User"."email", "public"."User"."passwordHash", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE ("public"."User"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+ POST /api/auth/login 200 in 749ms
+ GET /dashboard 200 in 122ms
+ ✓ Compiled /api/analyze in 260ms
+ POST /api/analyze 401 in 570ms
+ ✓ Compiled in 171ms
+ GET /dashboard 200 in 165ms
+ GET /dashboard 200 in 134ms
+ GET /login 200 in 191ms
+ POST /api/analyze 401 in 287ms
+ GET /history 200 in 117ms
+ GET /api/history 401 in 304ms
+ GET /api/history 401 in 276ms
+ GET /dashboard 200 in 230ms
+ POST /api/analyze 401 in 283ms
+ ○ Compiling /settings ...
+ ✓ Compiled /settings in 704ms
+ GET /settings 200 in 806ms
+ GET /settings 200 in 128ms
+ ✓ Compiled / in 84ms
+ GET / 200 in 880ms
+ ✓ Compiled in 228ms
+ ✓ Compiled / in 48ms
+ GET / 200 in 308ms
+ GET / 200 in 236ms
+ GET / 200 in 143ms
+ GET / 200 in 171ms
+ GET / 200 in 173ms
+ GET / 200 in 158ms
+ ✓ Compiled in 389ms
+ ✓ Compiled / in 44ms
+ GET / 200 in 422ms
+ ✓ Compiled in 337ms
+ GET / 200 in 186ms
+ ✓ Compiled /login in 49ms
+ GET /login 200 in 553ms
+ GET / 200 in 218ms
 [?25h

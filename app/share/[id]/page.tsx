@@ -52,7 +52,7 @@ export default function PublicSharePage() {
         </div>
         <h1 className="text-3xl font-bold tracking-tight mb-2">Analysis Unavailable</h1>
         <p className="text-slate-500 max-w-md mb-8">{error || 'This analysis is private or does not exist.'}</p>
-        <Link href="/" className="text-primary font-semibold hover:underline">Go to PromptPerfect</Link>
+        <Link href="/" className="text-primary font-semibold hover:underline">Go to PromptScore</Link>
       </div>
     )
   }
@@ -65,7 +65,7 @@ export default function PublicSharePage() {
             <div className="bg-primary rounded-lg p-1.5">
               <Image src="/images/logo.png" alt="Logo" width={20} height={20} className="invert" />
             </div>
-            <span className="text-lg font-bold tracking-tight">PromptPerfect</span>
+            <span className="text-lg font-bold tracking-tight">PromptScore</span>
           </Link>
           <Badge variant="secondary" className="rounded-full bg-slate-100 text-slate-600 border-none px-4 py-1">
             Shared Analysis
@@ -152,7 +152,7 @@ export default function PublicSharePage() {
         <div className="text-center pt-10">
           <p className="text-slate-400 text-sm mb-6">Want to perfect your own prompts?</p>
           <Button asChild size="lg" className="rounded-full px-10 h-14 text-lg font-semibold shadow-xl shadow-primary/20">
-            <Link href="/signup">Get Started with PromptPerfect</Link>
+            <Link href="/signup">Get Started with PromptScore</Link>
           </Button>
         </div>
       </main>
