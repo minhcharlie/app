@@ -1,17 +1,24 @@
+"use client"
+
+import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { ArrowRight, CheckCircle2, Sparkles, Zap, Split, BarChart3, Shield, MessageSquare, Globe, Layers, ChevronDown } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Sparkles, Zap, Split, BarChart3, Shield, MessageSquare, Globe, Layers, ChevronDown, Play, X } from 'lucide-react'
 import { PricingButton } from '@/components/PricingButton'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 
 export default function LandingPage() {
+  const [isDemoOpen, setIsDemoOpen] = useState(false)
+
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#1D1D1F] font-sans selection:bg-[#0071E3] selection:text-white">
       {/* Top Navigation */}
       <nav className="sticky top-0 z-50 w-full border-b border-[#D2D2D7]/30 bg-white/80 backdrop-blur-xl">
-        <div className="container max-w-[1200px] flex h-12 items-center justify-between px-6">
+        <div className="container max-w-[1200px] flex h-12 items-center justify-between px-6 mx-auto">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2 hover:opacity-70 transition-opacity">
+              <Image src="/images/logo.png" alt="Logo" width={24} height={24} className="rounded-md" />
               <span className="text-lg font-bold tracking-tight">PromptScore</span>
             </Link>
             <div className="hidden md:flex items-center gap-6">
@@ -33,7 +40,7 @@ export default function LandingPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden pt-20 pb-32 md:pt-32 md:pb-48">
-          <div className="container max-w-[1200px] px-6 text-center">
+          <div className="container max-w-[1200px] px-6 text-center mx-auto">
             <div className="mx-auto max-w-4xl space-y-6 animate-in fade-in slide-in-from-bottom-10 duration-1000">
               <h1 className="text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl leading-[1.1]">
                 Precision in every <br className="hidden md:block" />
@@ -47,11 +54,22 @@ export default function LandingPage() {
                 <Button size="lg" asChild className="rounded-full bg-[#0071E3] px-10 h-14 text-lg font-semibold hover:bg-[#0077ED] shadow-xl shadow-blue-500/10">
                   <Link href="/signup">Try it free</Link>
                 </Button>
-                <Button size="lg" variant="ghost" asChild className="rounded-full px-10 h-14 text-lg font-semibold text-[#0071E3] hover:bg-blue-50">
-                  <Link href="/login" className="flex items-center">
-                    View Demo <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
+                
+                <Dialog open={isDemoOpen} onOpenChange={setIsDemoOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="lg" variant="ghost" className="rounded-full px-10 h-14 text-lg font-semibold text-[#0071E3] hover:bg-blue-50">
+                      <Play className="mr-2 h-5 w-5 fill-current" /> Explore Demo
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-5xl p-0 bg-black border-none overflow-hidden rounded-[2rem]">
+                    <video 
+                      src="/demo.mp4" 
+                      controls 
+                      autoPlay 
+                      className="w-full aspect-video"
+                    />
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
 
@@ -71,7 +89,7 @@ export default function LandingPage() {
 
         {/* Social Proof Strip */}
         <section className="border-y border-[#D2D2D7]/30 bg-[#F5F5F7]/50 py-12">
-          <div className="container max-w-[1200px] px-6">
+          <div className="container max-w-[1200px] px-6 mx-auto">
             <div className="flex flex-wrap items-center justify-center gap-12 md:gap-24 opacity-40 grayscale">
               <div className="text-xl font-bold tracking-tighter">TECHCORP</div>
               <div className="text-xl font-bold tracking-tighter">NEXUS AI</div>
@@ -84,8 +102,8 @@ export default function LandingPage() {
 
         {/* Features Section */}
         <section id="features" className="py-32 md:py-48">
-          <div className="container max-w-[1200px] px-6">
-            <div className="mb-24 max-w-2xl">
+          <div className="container max-w-[1200px] px-6 mx-auto text-center">
+            <div className="mb-24 mx-auto max-w-2xl">
               <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl mb-6">
                 Engineered for <br /> excellence.
               </h2>
@@ -127,7 +145,7 @@ export default function LandingPage() {
                   description: "Access your entire evaluation history from any device, anywhere."
                 }
               ].map((feature, i) => (
-                <div key={i} className="group p-10 rounded-[2.5rem] bg-[#F5F5F7] border border-transparent hover:bg-white hover:border-[#D2D2D7]/50 hover:shadow-xl transition-all duration-500">
+                <div key={i} className="group p-10 rounded-[2.5rem] bg-[#F5F5F7] border border-transparent hover:bg-white hover:border-[#D2D2D7]/50 hover:shadow-xl transition-all duration-500 text-center">
                   <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm group-hover:scale-110 transition-transform duration-500">
                     {feature.icon}
                   </div>
@@ -141,8 +159,8 @@ export default function LandingPage() {
 
         {/* How It Works */}
         <section id="how-it-works" className="bg-[#1D1D1F] py-32 md:py-48 text-white overflow-hidden">
-          <div className="container max-w-[1200px] px-6">
-            <div className="text-center mb-24">
+          <div className="container max-w-[1200px] px-6 mx-auto text-center">
+            <div className="mb-24">
               <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl mb-6">Simple. Powerful.</h2>
               <p className="text-xl text-[#86868B] font-medium">Three steps to perfect your AI interactions.</p>
             </div>
@@ -165,7 +183,7 @@ export default function LandingPage() {
 
         {/* Testimonials */}
         <section className="py-32 md:py-48">
-          <div className="container max-w-[1200px] px-6">
+          <div className="container max-w-[1200px] px-6 mx-auto text-center">
             <div className="grid gap-8 md:grid-cols-2">
               {[
                 {
@@ -179,7 +197,7 @@ export default function LandingPage() {
                   role: "Senior Developer"
                 }
               ].map((t, i) => (
-                <div key={i} className="p-12 rounded-[3rem] bg-[#F5F5F7] space-y-8">
+                <div key={i} className="p-12 rounded-[3rem] bg-[#F5F5F7] space-y-8 text-center">
                   <p className="text-3xl font-medium leading-tight tracking-tight">"{t.quote}"</p>
                   <div>
                     <div className="font-bold text-lg">{t.author}</div>
@@ -193,8 +211,8 @@ export default function LandingPage() {
 
         {/* Pricing */}
         <section id="pricing" className="py-32 md:py-48 bg-[#F5F5F7]/50">
-          <div className="container max-w-[1200px] px-6">
-            <div className="text-center mb-24">
+          <div className="container max-w-[1200px] px-6 mx-auto text-center">
+            <div className="mb-24">
               <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl mb-6">Choose your plan.</h2>
               <p className="text-xl text-[#86868B] font-medium">Simple pricing for professionals and teams.</p>
             </div>
@@ -219,13 +237,13 @@ export default function LandingPage() {
                 <div key={i} className={`p-12 rounded-[3rem] bg-white border ${i === 1 ? 'border-[#0071E3] shadow-2xl shadow-blue-500/5' : 'border-[#D2D2D7]/50'}`}>
                   <div className="mb-8">
                     <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                    <div className="flex items-baseline gap-1">
+                    <div className="flex items-baseline gap-1 justify-center">
                       <span className="text-5xl font-bold tracking-tight">{plan.price}</span>
                       <span className="text-[#86868B] font-medium">/month</span>
                     </div>
                   </div>
                   <p className="text-[#86868B] font-medium mb-8">{plan.desc}</p>
-                  <ul className="space-y-4 mb-12">
+                  <ul className="space-y-4 mb-12 text-left max-w-xs mx-auto">
                     {plan.features.map((f, j) => (
                       <li key={j} className="flex items-center gap-3 text-sm font-medium">
                         <CheckCircle2 className="h-5 w-5 text-[#0071E3]" />
@@ -247,9 +265,9 @@ export default function LandingPage() {
 
         {/* FAQ */}
         <section id="faq" className="py-32 md:py-48">
-          <div className="container max-w-[800px] px-6">
-            <h2 className="text-4xl font-bold tracking-tight text-center mb-24">Frequently Asked Questions</h2>
-            <div className="space-y-8">
+          <div className="container max-w-[800px] px-6 mx-auto text-center">
+            <h2 className="text-4xl font-bold tracking-tight mb-24">Frequently Asked Questions</h2>
+            <div className="space-y-8 text-left">
               {[
                 { q: "How does the scoring work?", a: "We use advanced LLMs to analyze your prompt against established linguistic and logical frameworks for clarity, relevance, and coherence." },
                 { q: "Can I use my own API key?", a: "Currently, we provide the AI engine as part of our service, but enterprise plans can integrate with custom endpoints." },
@@ -270,7 +288,7 @@ export default function LandingPage() {
         </section>
 
         {/* Final CTA */}
-        <section className="container max-w-[1200px] px-6 py-32 text-center">
+        <section className="container max-w-[1200px] px-6 py-32 text-center mx-auto">
           <div className="mx-auto max-w-4xl space-y-8 animate-in fade-in duration-1000">
             <h2 className="text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl">
               Perfect your prompts <br /> today.
@@ -289,8 +307,8 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-[#D2D2D7]/30 py-20 bg-[#F5F5F7]">
-        <div className="container max-w-[1200px] px-6">
-          <div className="grid gap-12 md:grid-cols-4 mb-20">
+        <div className="container max-w-[1200px] px-6 mx-auto">
+          <div className="grid gap-12 md:grid-cols-4 mb-20 text-center md:text-left">
             <div className="space-y-4">
               <div className="text-lg font-bold tracking-tight">PromptScore</div>
               <p className="text-sm text-[#86868B] font-medium leading-relaxed">
@@ -316,8 +334,8 @@ export default function LandingPage() {
             <div>
               <h4 className="font-bold mb-6">Legal</h4>
               <ul className="space-y-4 text-sm text-[#86868B] font-medium">
-                <li><Link href="#" className="hover:text-[#1D1D1F] transition-colors">Privacy Policy</Link></li>
-                <li><Link href="#" className="hover:text-[#1D1D1F] transition-colors">Terms of Service</Link></li>
+                <li><Link href="/privacy" className="hover:text-[#1D1D1F] transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-[#1D1D1F] transition-colors">Terms of Service</Link></li>
               </ul>
             </div>
           </div>
